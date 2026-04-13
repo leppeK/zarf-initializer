@@ -1,5 +1,5 @@
 # Makefile
-ZARF_VERSION := v0.61.2
+ZARF_VERSION := v0.73.1
 ZARF_ARCH ?= amd64
 OUTPUT_DIR := _output
 ZARF_CLI := $(OUTPUT_DIR)/zarf
