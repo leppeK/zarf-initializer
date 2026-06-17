@@ -1,0 +1,39 @@
+name: Tag on Zarf version bump
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "Dockerfile"
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract Zarf version from Dockerfile
+        id: zarf_version
+        run: |
+          VERSION=$(grep -oP 'ARG ZARF_VERSION="\K[^"]+' Dockerfile)
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Create tag
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const tag = '${{ steps.zarf_version.outputs.version }}';
+            const ref = `refs/tags/${tag}`;
+
+            // Check if tag already exists to avoid failure on re-runs
+            try {
+              await github.rest.git.getRef({ owner: context.repo.owner, repo: context.repo.repo, ref: `tags/${tag}` });
+              console.log(`Tag ${tag} already exists, skipping.`);
+            } catch (e) {
+              await github.rest.git.createRef({ owner: context.repo.owner, repo: context.repo.repo, ref, sha: context.sha });
+              console.log(`Created tag ${tag}`);
+            }
