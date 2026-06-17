@@ -1,8 +1,9 @@
 name: Tag on Zarf version bump
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
     paths:
       - "Dockerfile"
 
