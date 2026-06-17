@@ -1,14 +1,13 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
-  "regexManagers": [
+  "customManagers": [
     {
-      "fileMatch": ["^Makefile$"],
-      "matchStrings": [
-        "# Renovate will update this line automatically.\\sZARF_VERSION := (?<currentValue>.*)"
-      ],
+      "customType": "regex",
+      "fileMatch": ["(^|/)Dockerfile$"],
+      "matchStrings": ["ARG ZARF_VERSION=\"(?<currentValue>[^\"]+)\""],
       "depNameTemplate": "defenseunicorns/zarf",
-      "datasourceTemplate": "github-releases"
+      "datasourceTemplate": "github-releases",
+      "versioningTemplate": "semver"
     }
   ]
 }
