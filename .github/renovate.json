@@ -1,5 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "automerge": true,
+  "automergeType": "pr",
+  "automergeStrategy": "squash",
+  "labels": ["renovate"],
+  "commitMessagePrefix": "chore(deps):",
   "customManagers": [
     {
       "customType": "regex",
