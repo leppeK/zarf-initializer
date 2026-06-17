@@ -90,3 +90,60 @@ jobs:
               await github.rest.git.createRef({ owner: context.repo.owner, repo: context.repo.repo, ref: `refs/tags/${tag}`, sha: context.sha });
               console.log(`Created tag ${tag}`);
             }
+
+      - name: Create GitHub Release
+        if: github.event_name != 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const tag = '${{ steps.zarf_version.outputs.version }}';
+            const image = '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}';
+
+            // Fetch Zarf release notes
+            let zarfBody = '';
+            try {
+              const zarfRelease = await github.rest.repos.getReleaseByTag({
+                owner: 'defenseunicorns',
+                repo: 'zarf',
+                tag,
+              });
+              zarfBody = zarfRelease.data.body ?? '';
+            } catch (e) {
+              console.log(`Could not fetch Zarf release notes: ${e.message}`);
+            }
+
+            const body = [
+              `## Zarf Initializer ${tag}`,
+              ``,
+              `Tracking [Zarf ${tag}](https://github.com/defenseunicorns/zarf/releases/tag/${tag}).`,
+              ``,
+              `### Image`,
+              `\`\`\``,
+              `docker pull ${image}:${tag}`,
+              `\`\`\``,
+              ``,
+              `---`,
+              ``,
+              `### Zarf ${tag} Release Notes`,
+              ``,
+              zarfBody,
+            ].join('\n');
+
+            try {
+              await github.rest.repos.createRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                tag_name: tag,
+                name: tag,
+                body,
+                draft: false,
+                prerelease: false,
+              });
+              console.log(`Created release ${tag}`);
+            } catch (e) {
+              if (e.status === 422) {
+                console.log(`Release ${tag} already exists, skipping.`);
+              } else {
+                throw e;
+              }
+            }
