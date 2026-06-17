@@ -1,9 +1,14 @@
 name: Docker
 
 on:
-  workflow_dispatch:
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "Dockerfile"
   push:
-    tags: ["v*.*.*"]
+    branches: ["main"]
+    paths:
+      - "Dockerfile"
 
 env:
   REGISTRY: ghcr.io
@@ -13,7 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
       id-token: write
 
@@ -66,8 +71,22 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Sign the published Docker image
-        if: ${{ github.event_name != 'pull_request' }}
+        if: github.event_name != 'pull_request'
         env:
           TAGS: ${{ steps.meta.outputs.tags }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+
+      - name: Create git tag
+        if: github.event_name != 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const tag = '${{ steps.zarf_version.outputs.version }}';
+            try {
+              await github.rest.git.getRef({ owner: context.repo.owner, repo: context.repo.repo, ref: `tags/${tag}` });
+              console.log(`Tag ${tag} already exists, skipping.`);
+            } catch (e) {
+              await github.rest.git.createRef({ owner: context.repo.owner, repo: context.repo.repo, ref: `refs/tags/${tag}`, sha: context.sha });
+              console.log(`Created tag ${tag}`);
+            }
