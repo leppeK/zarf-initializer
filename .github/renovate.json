@@ -13,6 +13,14 @@
       "depNameTemplate": "defenseunicorns/zarf",
       "datasourceTemplate": "github-releases",
       "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["examples/.*\\.ya?ml$"],
+      "matchStrings": ["image:\\s*ghcr\\.io/leppek/zarf-initializer:(?<currentValue>[^\\s\"]+)"],
+      "depNameTemplate": "defenseunicorns/zarf",
+      "datasourceTemplate": "github-releases",
+      "versioningTemplate": "semver"
     }
   ]
 }
