@@ -76,6 +76,10 @@ ENTRYPOINT [ "/zarf", "--zarf-cache", "/zarf-cache" ]
 
 Because the base is `scratch`, the image contains nothing but the Zarf binary and the init package -- no shell, no OS libraries.
 
+## Upstream
+
+This project tracks [Zarf](https://github.com/defenseunicorns/zarf) releases.
+
 ## Automated updates
 
 [Renovate](https://github.com/renovatebot/renovate) monitors upstream Zarf releases and automatically bumps the version in the Dockerfile.
