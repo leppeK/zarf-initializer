@@ -5,6 +5,13 @@
   "automergeStrategy": "squash",
   "labels": ["renovate"],
   "commitMessagePrefix": "chore(deps):",
+  "packageRules": [
+    {
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["major"],
+      "automerge": true
+    }
+  ],
   "customManagers": [
     {
       "customType": "regex",
@@ -17,7 +24,9 @@
     {
       "customType": "regex",
       "fileMatch": ["examples/.*\\.ya?ml$"],
-      "matchStrings": ["image:\\s*ghcr\\.io/leppek/zarf-initializer:(?<currentValue>[^\\s\"]+)"],
+      "matchStrings": [
+        "image:\\s*ghcr\\.io/leppek/zarf-initializer:(?<currentValue>[^\\s\"]+)"
+      ],
       "depNameTemplate": "defenseunicorns/zarf",
       "datasourceTemplate": "github-releases",
       "versioningTemplate": "semver"
