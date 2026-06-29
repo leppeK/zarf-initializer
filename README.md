@@ -1,6 +1,6 @@
 # zarf-initializer
 
-Minimal container image for initializing a Kubernetes cluster with [Zarf](https://github.com/defenseunicorns/zarf) in an unattended manner.
+Minimal container image for initializing a Kubernetes cluster with [Zarf](https://github.com/zarf-dev/zarf) in an unattended manner.
 
 The image is built from `scratch` and bundles the `zarf` binary alongside the `zarf-init` package, so no network access is needed at runtime to fetch the init package.
 
@@ -78,7 +78,7 @@ Because the base is `scratch`, the image contains nothing but the Zarf binary an
 
 ## Upstream
 
-This project tracks [Zarf](https://github.com/defenseunicorns/zarf) releases.
+This project tracks [Zarf](https://github.com/zarf-dev/zarf) releases.
 
 ## Automated updates
 
