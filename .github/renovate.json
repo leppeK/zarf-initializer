@@ -3,7 +3,6 @@
   "automerge": true,
   "automergeType": "pr",
   "automergeStrategy": "squash",
-  "platformAutomerge": false,
   "labels": ["renovate"],
   "commitMessagePrefix": "chore(deps):",
   "packageRules": [
