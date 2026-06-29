@@ -5,12 +5,29 @@
   "automergeStrategy": "squash",
   "labels": ["renovate"],
   "commitMessagePrefix": "chore(deps):",
+  "packageRules": [
+    {
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["major"],
+      "automerge": true
+    }
+  ],
   "customManagers": [
     {
       "customType": "regex",
       "fileMatch": ["(^|/)Dockerfile$"],
       "matchStrings": ["ARG ZARF_VERSION=\"(?<currentValue>[^\"]+)\""],
-      "depNameTemplate": "defenseunicorns/zarf",
+      "depNameTemplate": "zarf-dev/zarf",
+      "datasourceTemplate": "github-releases",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["examples/.*\\.ya?ml$"],
+      "matchStrings": [
+        "image:\\s*ghcr\\.io/leppek/zarf-initializer:(?<currentValue>[^\\s\"]+)"
+      ],
+      "depNameTemplate": "zarf-dev/zarf",
       "datasourceTemplate": "github-releases",
       "versioningTemplate": "semver"
     }
