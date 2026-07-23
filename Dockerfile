@@ -1,7 +1,7 @@
 FROM busybox:stable AS busybox
 
 FROM scratch
-ARG ZARF_VERSION="v0.81.1"
+ARG ZARF_VERSION="v0.82.0"
 ARG ZARF_ARCH="amd64"
 COPY --from=busybox /bin/sh /bin/sh
 ADD --chmod=+x "https://github.com/zarf-dev/zarf/releases/download/${ZARF_VERSION}/zarf_${ZARF_VERSION}_Linux_${ZARF_ARCH}" /zarf 
