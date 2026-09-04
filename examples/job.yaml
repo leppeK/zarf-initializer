@@ -9,5 +9,5 @@ spec:
       serviceAccountName: zarf-initializer
       containers:
       - name: zarf-initializer
-        image: ghcr.io/leppek/zarf-initializer:v0.84.0
+        image: ghcr.io/leppek/zarf-initializer:v0.85.0
       restartPolicy: OnFailure
